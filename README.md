@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Less tax client application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the client side application of less tax
 
 ## Available Scripts
 

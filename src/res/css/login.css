@@ -11,10 +11,19 @@
 }
 .login-button-container {
   padding: 20px;
+  position: relative;
 }
 .login-container {
   padding: 50px;
 }
 .login-text-input {
   margin-top: 20px;
+}
+.login-progress-button {
+  color: #56ba4b !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -12px;
+  margin-left: -12px;
 }

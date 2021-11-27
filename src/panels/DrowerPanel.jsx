@@ -4,22 +4,26 @@ import {
   SupportAgent,
   RssFeed,
   PermPhoneMsg,
+  Login,
+  Logout,
 } from "@mui/icons-material";
 import {
   Drawer,
-  Typography,
   List,
-  ListItem,
   ListItemIcon,
   ListItemText,
   ListItemButton,
   Collapse,
+  ListItemAvatar,
+  Avatar,
+  ListItem,
 } from "@mui/material";
 import { useState } from "react";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
-import "../res/css/navbar.css";
+import { useRecoilState } from "recoil";
+import { loginedUser } from "../atom/taxatoms";
 
-const DrowerPanel = ({ openDrower, setOpenDrower }) => {
+const DrowerPanel = ({ openDrower, setOpenDrower, navigate }) => {
+  const [loginedUserData, setLoginedUserData] = useRecoilState(loginedUser);
   const [open, setOpen] = useState(false);
   const closeMenu = () => {
     setOpenDrower(false);
@@ -31,6 +35,19 @@ const DrowerPanel = ({ openDrower, setOpenDrower }) => {
       ModalProps={{ onBackdropClick: closeMenu }}
     >
       <List component="nav">
+        {loginedUserData.firstName !== "" && (
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar sx={{ bgcolor: "#56ba4b" }}>
+                {loginedUserData.firstName.charAt(0).toUpperCase()}
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              primary={loginedUserData.firstName}
+              secondary={loginedUserData.lastName}
+            />
+          </ListItem>
+        )}
         <ListItemButton
           divider
           onClick={() => {
@@ -38,13 +55,13 @@ const DrowerPanel = ({ openDrower, setOpenDrower }) => {
           }}
         >
           <ListItemIcon>
-            <SupportAgent style={{ color: "#56ba4b" }} />
+            <SupportAgent className="navbar-icon-color" />
           </ListItemIcon>
           <ListItemText primary="Services" />
           {open ? (
-            <ExpandLess style={{ color: "#56ba4b" }} />
+            <ExpandLess className="navbar-icon-color" />
           ) : (
-            <ExpandMore style={{ color: "#56ba4b" }} />
+            <ExpandMore className="navbar-icon-color" />
           )}
         </ListItemButton>
         <Collapse in={open} timeout="auto" unmountOnExit>
@@ -70,7 +87,7 @@ const DrowerPanel = ({ openDrower, setOpenDrower }) => {
           }}
         >
           <ListItemIcon>
-            <RssFeed style={{ color: "#56ba4b" }} />
+            <RssFeed className="navbar-icon-color" />
           </ListItemIcon>
           <ListItemText primary="Blog" />
         </ListItemButton>
@@ -81,10 +98,43 @@ const DrowerPanel = ({ openDrower, setOpenDrower }) => {
           }}
         >
           <ListItemIcon>
-            <PermPhoneMsg style={{ color: "#56ba4b" }} />
+            <PermPhoneMsg className="navbar-icon-color" />
           </ListItemIcon>
           <ListItemText primary="Contact With Us" />
         </ListItemButton>
+        {loginedUserData.firstName === "" ? (
+          <ListItemButton
+            divider
+            onClick={() => {
+              navigate("/login-or-registration");
+              setOpenDrower(false);
+            }}
+          >
+            <ListItemIcon>
+              <Login className="navbar-icon-color" />
+            </ListItemIcon>
+            <ListItemText primary="Login / Sign Up" />
+          </ListItemButton>
+        ) : (
+          <ListItemButton
+            divider
+            onClick={() => {
+              setLoginedUserData({
+                firstName: "",
+                lastName: "",
+                email: "",
+                mobileNumber: "",
+                password: "",
+              });
+              setOpenDrower(false);
+            }}
+          >
+            <ListItemIcon>
+              <Login className="navbar-icon-color" />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+          </ListItemButton>
+        )}
       </List>
     </Drawer>
   );
