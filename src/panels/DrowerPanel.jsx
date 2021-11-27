@@ -4,22 +4,19 @@ import {
   SupportAgent,
   RssFeed,
   PermPhoneMsg,
+  Login,
 } from "@mui/icons-material";
 import {
   Drawer,
-  Typography,
   List,
-  ListItem,
   ListItemIcon,
   ListItemText,
   ListItemButton,
   Collapse,
 } from "@mui/material";
 import { useState } from "react";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
-import "../res/css/navbar.css";
 
-const DrowerPanel = ({ openDrower, setOpenDrower }) => {
+const DrowerPanel = ({ openDrower, setOpenDrower, navigate }) => {
   const [open, setOpen] = useState(false);
   const closeMenu = () => {
     setOpenDrower(false);
@@ -38,13 +35,13 @@ const DrowerPanel = ({ openDrower, setOpenDrower }) => {
           }}
         >
           <ListItemIcon>
-            <SupportAgent style={{ color: "#56ba4b" }} />
+            <SupportAgent className="navbar-icon-color" />
           </ListItemIcon>
           <ListItemText primary="Services" />
           {open ? (
-            <ExpandLess style={{ color: "#56ba4b" }} />
+            <ExpandLess className="navbar-icon-color" />
           ) : (
-            <ExpandMore style={{ color: "#56ba4b" }} />
+            <ExpandMore className="navbar-icon-color" />
           )}
         </ListItemButton>
         <Collapse in={open} timeout="auto" unmountOnExit>
@@ -70,7 +67,7 @@ const DrowerPanel = ({ openDrower, setOpenDrower }) => {
           }}
         >
           <ListItemIcon>
-            <RssFeed style={{ color: "#56ba4b" }} />
+            <RssFeed className="navbar-icon-color" />
           </ListItemIcon>
           <ListItemText primary="Blog" />
         </ListItemButton>
@@ -81,9 +78,21 @@ const DrowerPanel = ({ openDrower, setOpenDrower }) => {
           }}
         >
           <ListItemIcon>
-            <PermPhoneMsg style={{ color: "#56ba4b" }} />
+            <PermPhoneMsg className="navbar-icon-color" />
           </ListItemIcon>
           <ListItemText primary="Contact With Us" />
+        </ListItemButton>
+        <ListItemButton
+          divider
+          onClick={() => {
+            navigate("/login-or-registration");
+            setOpenDrower(false);
+          }}
+        >
+          <ListItemIcon>
+            <Login className="navbar-icon-color" />
+          </ListItemIcon>
+          <ListItemText primary="Login / Sign Up" />
         </ListItemButton>
       </List>
     </Drawer>

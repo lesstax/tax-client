@@ -1,4 +1,3 @@
-import "./App.css";
 import LoginOrRegistraion from "./components/LoginOrRegistraion";
 import { CssBaseline } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";

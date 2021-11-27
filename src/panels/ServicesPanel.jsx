@@ -5,7 +5,7 @@ import "../res/css/home.css";
 const ServicesPanel = () => {
   const matches = useMediaQuery("(max-width:600px)");
   return (
-    <Grid container style={{ marginBottom: 20, padding: 10 }}>
+    <Grid container className="services-container">
       <Grid
         item
         xs={12}
