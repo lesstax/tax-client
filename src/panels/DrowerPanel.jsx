@@ -5,6 +5,7 @@ import {
   RssFeed,
   PermPhoneMsg,
   Login,
+  Logout,
 } from "@mui/icons-material";
 import {
   Drawer,
@@ -13,10 +14,16 @@ import {
   ListItemText,
   ListItemButton,
   Collapse,
+  ListItemAvatar,
+  Avatar,
+  ListItem,
 } from "@mui/material";
 import { useState } from "react";
+import { useRecoilState } from "recoil";
+import { loginedUser } from "../atom/taxatoms";
 
 const DrowerPanel = ({ openDrower, setOpenDrower, navigate }) => {
+  const [loginedUserData, setLoginedUserData] = useRecoilState(loginedUser);
   const [open, setOpen] = useState(false);
   const closeMenu = () => {
     setOpenDrower(false);
@@ -28,6 +35,19 @@ const DrowerPanel = ({ openDrower, setOpenDrower, navigate }) => {
       ModalProps={{ onBackdropClick: closeMenu }}
     >
       <List component="nav">
+        {loginedUserData.firstName !== "" && (
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar sx={{ bgcolor: "#56ba4b" }}>
+                {loginedUserData.firstName.charAt(0).toUpperCase()}
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              primary={loginedUserData.firstName}
+              secondary={loginedUserData.lastName}
+            />
+          </ListItem>
+        )}
         <ListItemButton
           divider
           onClick={() => {
@@ -82,18 +102,39 @@ const DrowerPanel = ({ openDrower, setOpenDrower, navigate }) => {
           </ListItemIcon>
           <ListItemText primary="Contact With Us" />
         </ListItemButton>
-        <ListItemButton
-          divider
-          onClick={() => {
-            navigate("/login-or-registration");
-            setOpenDrower(false);
-          }}
-        >
-          <ListItemIcon>
-            <Login className="navbar-icon-color" />
-          </ListItemIcon>
-          <ListItemText primary="Login / Sign Up" />
-        </ListItemButton>
+        {loginedUserData.firstName === "" ? (
+          <ListItemButton
+            divider
+            onClick={() => {
+              navigate("/login-or-registration");
+              setOpenDrower(false);
+            }}
+          >
+            <ListItemIcon>
+              <Login className="navbar-icon-color" />
+            </ListItemIcon>
+            <ListItemText primary="Login / Sign Up" />
+          </ListItemButton>
+        ) : (
+          <ListItemButton
+            divider
+            onClick={() => {
+              setLoginedUserData({
+                firstName: "",
+                lastName: "",
+                email: "",
+                mobileNumber: "",
+                password: "",
+              });
+              setOpenDrower(false);
+            }}
+          >
+            <ListItemIcon>
+              <Login className="navbar-icon-color" />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+          </ListItemButton>
+        )}
       </List>
     </Drawer>
   );

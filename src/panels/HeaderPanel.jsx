@@ -1,8 +1,13 @@
 import { useState } from "react";
 import {
+  Avatar,
   Button,
   Grid,
   IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -12,11 +17,16 @@ import LinksPanel from "./LinksPanel";
 import { useNavigate } from "react-router-dom";
 import ServicesOverLayPanel from "./ServicesOverLayPanel";
 import "../res/css/navbar.css";
+import { loginedUser } from "../atom/taxatoms";
+import { useRecoilState } from "recoil";
+import { AccountCircle, Logout } from "@mui/icons-material";
+
 const HeaderPanel = () => {
   let navigate = useNavigate();
   const [showLinks, setShowLinks] = useState(false);
   const [openDrower, setOpenDrower] = useState(false);
   const [selectedElement, setSelectedElement] = useState("");
+  const [loginedUserData, setLoginedUserData] = useRecoilState(loginedUser);
   const matches = useMediaQuery("(max-width:898px)");
   const onOpenDrowerClick = () => {
     setOpenDrower(true);
@@ -32,6 +42,24 @@ const HeaderPanel = () => {
   };
   const changeSelectedElementEnter = (e) => {
     setSelectedElement(e.currentTarget.id);
+  };
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleLogout = () => {
+    setLoginedUserData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      mobileNumber: "",
+      password: "",
+    });
+    setAnchorEl(null);
   };
   return (
     <>
@@ -73,7 +101,7 @@ const HeaderPanel = () => {
                 <MenuIcon />
               </IconButton>
             </>
-          ) : (
+          ) : loginedUserData.firstName === "" ? (
             <Button
               disableElevation
               variant="contained"
@@ -83,6 +111,45 @@ const HeaderPanel = () => {
             >
               Log In / Sign Up
             </Button>
+          ) : (
+            <>
+              <Avatar
+                className="user-avatar"
+                sx={{ bgcolor: "#56ba4b" }}
+                aria-controls="basic-menu"
+                aria-haspopup="true"
+                id="basic-button"
+                aria-expanded={open ? "true" : undefined}
+                onClick={handleClick}
+              >
+                {loginedUserData.firstName.charAt(0).toUpperCase()}
+              </Avatar>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                <MenuItem>
+                  <ListItemIcon>
+                    <AccountCircle fontSize="small" className="user-icon" />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={loginedUserData.firstName}
+                    secondary={loginedUserData.lastName}
+                  />
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <ListItemIcon>
+                    <Logout fontSize="small" className="user-icon" />
+                  </ListItemIcon>
+                  <ListItemText>Logout</ListItemText>
+                </MenuItem>
+              </Menu>
+            </>
           )}
         </Grid>
         {showLinks ? (
